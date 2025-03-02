@@ -1,0 +1,67 @@
+/* css/styles.css - Estilos Gerais */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    flex-direction: column; /* Para empilhar logo e o container */
+}
+
+/* Estilos para a logo fora do container */
+.logo-container {
+    text-align: center; /* Centraliza a logo */
+    margin-bottom: 20px; /* Espaçamento entre a logo e o formulário */
+}
+
+.logo {
+    width: 120%; /* Ajuste a largura da imagem conforme necessário */
+    max-width: 200px; /* Limite máximo de largura */
+}
+
+/* Contêiner do formulário de login */
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 350px; /* Ajusta a largura do container */
+    text-align: center;
+}
+
+/* Estilo para o título */
+h2 {
+    margin-bottom: 20px;
+}
+
+/* Estilo para os campos de input */
+input {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Estilo para o botão */
+button {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #218838;
+}
+
+/* Estilo para mensagens de erro */
+.error {
+    color: red;
+    margin-top: 10px;
+}

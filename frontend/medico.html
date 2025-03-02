@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prontuário do Paciente</title>
+    <link rel="stylesheet" href="css/stylesMedico.css">
+</head>
+<body>
+    <div class="logo-container">
+        <img src="/img/medic (2).png" alt="Logo da empresa" class="logo">
+    </div>
+    <div class="container">
+        <div class="form-section">
+            <h2>Prontuário do Paciente</h2>
+            <form id="searchPatientForm">
+                <label for="search-cpf">Buscar por CPF:</label>
+                <input type="text" id="search-cpf" name="search-cpf" required>
+                <button type="submit">Buscar</button>
+            </form>
+
+            <div id="patientInfo" class="hidden">
+                <h3>Dados do Paciente</h3>
+                <p><strong>Nome:</strong> <span id="patient-nome"></span></p>
+                <p><strong>Telefone:</strong> <span id="patient-telefone"></span></p>
+                <p><strong>Endereço:</strong> <span id="patient-endereco"></span></p>
+                <p><strong>Remédios:</strong> <span id="patient-remedios"></span></p>
+                <p><strong>Sintomas:</strong> <span id="patient-sintomas"></span></p>
+
+                <h3>Atualizar Prontuário</h3>
+                <label for="diagnostico">Diagnóstico:</label>
+                <textarea id="diagnostico" name="diagnostico" required></textarea>
+                
+                <label for="prescricao">Prescrição:</label>
+                <textarea id="prescricao" name="prescricao"></textarea>
+                
+                <button id="updateProntuario">Salvar Atualizações</button>
+            </div>
+
+            <p id="error-message" class="error"></p>
+            <button onclick="logout()">Sair</button>
+        </div>
+
+        <!-- Histórico de Prontuários -->
+        <div class="history-section">
+            <h4>Histórico de Prontuários</h4>
+            <div id="historyList">
+                <!-- Prontuários anteriores serão carregados aqui -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
