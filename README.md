@@ -5,7 +5,7 @@
 Este é um sistema de atendimento médico desenvolvido com Node.js, Express, MongoDB (Mongoose) e JWT para autenticaçãos solicitado pela **Professora Samara Sonale Santos Sampaio**, os alunos responsaveis pelo projeto são: **Alexsandra Batista de Luna, Bruna Rafaela de Menezes Paulino, Gustavo Tomio Magalhaes Kubo,Sérgio Magno Castor Pinheiro, Thiago Limeira de Alencar**.  
 O sistema segue a arquitetura RESTful e permite que atendentes e médicos cadastrem e gerenciem pacientes, com funcionalidade para criar e visualizar prontuários médicos.
 
----
+
 ## 📚 Tecnologias Utilizadas
 
 ✅ Node.js + Express
@@ -15,7 +15,6 @@ O sistema segue a arquitetura RESTful e permite que atendentes e médicos cadast
 ✅ Dotenv para configurações sensíveis
 ✅ Middlewares para autenticação e validação
 
----
 
 ## 📌 RESTful no Sistema
 A aplicação segue o padrão RESTful, onde cada recurso (“Paciente”, “Usuário”, “Prontuário”) possui seus próprios endpoints e responde a diferentes métodos HTTP:
@@ -27,12 +26,12 @@ A aplicação segue o padrão RESTful, onde cada recurso (“Paciente”, “Usu
 ✅ Uso de **status codes HTTP** apropriados (200 OK, 400 Bad Request, 401 Unauthorized, etc.).  
 
 Os dados são estruturados em coleções no MongoDB, respeitando os relacionamentos definidos entre entidades.
----
+
 
 ## 🔹 Endpoints da API
 
 
-## ✅ 1 Validação dos Dados**
+**✅ 1 Validação dos Dados**
 
 Login
 POST /auth/login
@@ -47,9 +46,9 @@ Resposta:
 {
   "token": "JWT_TOKEN_AQUI"
 }
----
 
-### **📋 2 Usuários (Atendentes e Médicos)**
+
+**📋 2 Usuários (Atendentes e Médicos)**
 Criar um usuário
 
 POST /users/register
@@ -63,7 +62,7 @@ Body:
   "tipo": "medico"  
 }
 
-### **📝 3 Pacientes**
+**📝 3 Pacientes**
 Cadastro de Paciente
 
 POST /patients
@@ -80,9 +79,8 @@ Body:
 Buscar Paciente por CPF
 
 GET /patients/:cpf
----
 
-### **📋 4 Prontuários**
+**📋 4 Prontuários**
 Criar Prontuário para um Paciente
 
 POST /records
@@ -94,10 +92,10 @@ Body:
   "diagnostico": "Gripe",
   "prescricao": "Antitérmico e Repouso"
 }
----
+
 
 Buscar Histórico de Prontuários
----
+
 
 ## ✅ Validação dos Dados
 O sistema utiliza Middlewares para validação de dados antes do processamento:
@@ -105,9 +103,6 @@ O sistema utiliza Middlewares para validação de dados antes do processamento:
 Express Validator para garantir formato correto de CPF, email e campos obrigatórios.
 
 Bcrypt para hash seguro de senhas.
-
-
-```
 
 ## 🔑 Autenticação com JWT
 Cada requisição protegida requer um token JWT no cabeçalho:
