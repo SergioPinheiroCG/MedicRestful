@@ -109,9 +109,6 @@ Authorization: Bearer JWT_TOKEN_AQUI
 
 Caso o token seja inválido, o acesso é negado.
 
-
----
-
 ## 🔗 Relacionamentos entre Entidades
 ### **📌 Paciente e Prontuário (1:N)**
 Usuário (Atendente/Médico) pode cadastrar pacientes e prontuários.
@@ -119,8 +116,6 @@ Usuário (Atendente/Médico) pode cadastrar pacientes e prontuários.
 Paciente possui vários Prontuários.
 
 Prontuário pertence a um único Paciente.
-
----
 
 ### **Como funciona?**
 1️⃣ O usuário faz login (`POST /login`) enviando email e senha.  
@@ -152,7 +147,7 @@ dbURI=mongodb+srv://usuario:senha@cluster.mongodb.net/meubanco
 ```bash
 node index.js
 ```
----
+
 
 🔥 **Desenvolvido por [Alexsandra Batista de Luna, Bruna Rafaela de Menezes Paulino, Gustavo Tomio Magalhaes Kubo,Sérgio Magno Castor Pinheiro, Thiago Limeira de Alencar]** 🔥
 
