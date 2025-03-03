@@ -8,28 +8,26 @@ O sistema segue a arquitetura RESTful e permite que atendentes e médicos cadast
 
 ## 📚 Tecnologias Utilizadas
 
-✅ Node.js + Express
-✅ MongoDB + Mongoose
-✅ JWT para autenticação
-✅ Bcrypt para hash de senhas
-✅ Dotenv para configurações sensíveis
-✅ Middlewares para autenticação e validação
+- ✅ Node.js + Express
+- ✅ MongoDB + Mongoose
+- ✅ JWT para autenticação
+- ✅ Bcrypt para hash de senhas
+- ✅ Dotenv para configurações sensíveis
+- ✅ Middlewares para autenticação e validação
 
 
 ## 📌 RESTful no Sistema
 A aplicação segue o padrão RESTful, onde cada recurso (“Paciente”, “Usuário”, “Prontuário”) possui seus próprios endpoints e responde a diferentes métodos HTTP:
 
-✅ GET para buscar dados  
-✅ POST para criar novos registros
-✅ PUT para atualizar
-✅ DELETE para remover registros
-✅ Uso de **status codes HTTP** apropriados (200 OK, 400 Bad Request, 401 Unauthorized, etc.).  
+- ✅ GET para buscar dados  
+- ✅ POST para criar novos registros  
+- ✅ PUT para atualizar  
+- ✅ DELETE para remover registros  
+- ✅ Uso de status codes HTTP apropriados (200 OK, 400 Bad Request, 401 Unauthorized, etc.).
 
 Os dados são estruturados em coleções no MongoDB, respeitando os relacionamentos definidos entre entidades.
 
-
 ## 🔹 Endpoints da API
-
 
 **✅ 1 Validação dos Dados**
 
