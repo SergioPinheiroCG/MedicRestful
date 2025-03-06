@@ -7,14 +7,6 @@ const Patient = require('../models/Patient');
 
 const router = express.Router();
 
-// Middleware para verificar se o usuário é médico
-// const isMedico = (req, res, next) => {
-//     if (req.user.role !== 'medico') {
-//         return res.status(403).json({ msg: 'Acesso negado. Apenas médicos podem adicionar prontuários.' });
-//     }
-//     next();
-// };
-
 // Rota para cadastrar um paciente (somente atendentes)
 router.post('/register', authMiddleware, createPatient);
 
@@ -68,6 +60,59 @@ router.get('/:cpf/prontuarios', authMiddleware, isMedico, async (req, res) => {
         res.status(200).json({ prontuarios: paciente.prontuarios || [] });
     } catch (error) {
         res.status(500).json({ msg: 'Erro ao buscar prontuários', error });
+    }
+});
+
+// Rota para excluir um paciente pelo CPF (acesso permitido para atendentes e médicos)
+router.delete('/:cpf', authMiddleware, isMedico, async (req, res) => {
+    try {
+        const { cpf } = req.params;
+
+        // Buscar paciente pelo CPF
+        const paciente = await Patient.findOne({ cpf });
+        if (!paciente) {
+            return res.status(404).json({ msg: 'Paciente não encontrado' });
+        }
+
+        // Remover o paciente do banco de dados
+        await Patient.deleteOne({ cpf });
+
+        res.status(200).json({ msg: 'Paciente excluído com sucesso' });
+    } catch (error) {
+        console.error("Erro ao tentar deletar paciente:", error); // Log detalhado
+        res.status(500).json({ msg: 'Erro ao excluir paciente', error: error.message });
+    }
+});
+
+// Rota para atualizar um paciente pelo CPF (acesso permitido para atendentes e médicos)
+router.put('/:cpf', authMiddleware, isMedico, async (req, res) => {
+    try {
+        const { cpf } = req.params;
+        const { nome, telefone, endereco, remedios, sintomas } = req.body;
+
+        // Verificar se os dados obrigatórios foram enviados
+        if (!nome && !data_nascimento && !endereco) {
+            return res.status(400).json({ msg: 'Nenhum dado válido fornecido para atualização.' });
+        }
+
+        // Buscar paciente pelo CPF
+        const paciente = await Patient.findOne({ cpf });
+        if (!paciente) {
+            return res.status(404).json({ msg: 'Paciente não encontrado' });
+        }
+
+        // Atualizar os dados do paciente
+        paciente.nome = nome || paciente.nome;
+        paciente.telefone = telefone || paciente.telefone;
+        paciente.endereco = endereco || paciente.endereco;
+        paciente.remedios = remedios || paciente.remedios;
+        paciente.sintomas = sintomas || paciente.sintomas;
+
+        await paciente.save();
+
+        res.status(200).json({ msg: 'Paciente atualizado com sucesso', paciente });
+    } catch (error) {
+        res.status(500).json({ msg: 'Erro ao atualizar paciente', error });
     }
 });
 
