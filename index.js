@@ -1,28 +1,21 @@
-// index.js - Ponto de entrada do servidor
-require('dotenv').config();
+require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
+const bodyParser = require("body-parser");
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const patientRoutes = require('./routes/patientRoutes');
+const prontuarioRoutes = require('./routes/prontuarioRoutes');
+const db = require("./db/db.js");
 
 const app = express();
+app.use(bodyParser.json()); // Permite o uso do body-parser para interpretar requisições POST com JSON
+app.use('/api', authRoutes);
+app.use('/api', patientRoutes);
+app.use('/api', prontuarioRoutes);
 
-// Configuração do Middleware
-app.use(express.json());
-app.use(cors());
 
-// Conexão com o MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-    //useNewUrlParser: true,
-    //useUnifiedTopology: true
-}).then(() => console.log('MongoDB conectado!'))
-  .catch(err => console.log(err));
-
-// Rotas
-app.use('/auth', authRoutes);
-app.use('/patients', patientRoutes);
-
+// Inicia o servidor
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
-
+app.listen(PORT, () => {
+    console.log(`Aplicação rodando na porta ${PORT}`);
+});

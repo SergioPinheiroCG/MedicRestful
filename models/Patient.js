@@ -1,20 +1,14 @@
 const mongoose = require('mongoose');
+const Endereco = require('./Endereco');
+const Prontuario = require('./Prontuario');
+const User = require('./User');
 
-const ProntuarioSchema = new mongoose.Schema({
-    data: { type: Date, default: Date.now },
-    medico: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    diagnostico: { type: String, required: true },
-    prescricao: { type: String, required: true }
-});
-
-const PatientSchema = new mongoose.Schema({
+const patientSchema = new mongoose.Schema({
+    nome: { type: String, required: true }, 
     cpf: { type: String, unique: true, required: true },
-    nome: { type: String, required: true },
-    telefone: { type: String, required: true },
-    endereco: { type: String, required: true },
-    remedios: { type: [String], default: [] },
-    sintomas: { type: [String], default: [] },
-    prontuarios: { type: [ProntuarioSchema], default: [] } // Lista de prontuários
+    endereco: { type: mongoose.Schema.Types.ObjectId, ref: 'Endereco' }, // Relacionamento 1:1 com Endereco
+    prontuarios: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Prontuario' }], // Relacionamento 1:N com Prontuário
+    medicos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] // Relacionamento N:N com User (médicos)
 });
 
-module.exports = mongoose.model('Patient', PatientSchema);
+module.exports = mongoose.model('Patient', patientSchema);
