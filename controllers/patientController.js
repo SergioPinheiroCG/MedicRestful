@@ -1,5 +1,8 @@
+const User = require('../models/User'); 
 const Patient = require('../models/Patient');
+const Prontuario = require('../models/Prontuario');
 const Endereco = require('../models/Endereco');
+
 const mongoose = require('mongoose');
 
 // Função para enviar resposta de erro de forma padronizada
@@ -14,34 +17,65 @@ const sendSuccessResponse = (res, data, message = 'Operação realizada com suce
     return res.status(200).send({ message, data });
 };
 
-// Criação de paciente com endereço
+
 exports.createPatient = async (req, res) => {
     try {
-        const { cpf, endereco, ...patientData } = req.body;
+        const medicoId = req.userId; // Médico autenticado pelo token
+        const { nome, cpf, endereco, prontuarios } = req.body;
 
-        // Verifica se o paciente já existe
-        const existingPatient = await Patient.findOne({ cpf });
-        if (existingPatient) {
-            return res.status(400).send({ message: 'Paciente já cadastrado com este CPF.' });
+        if (!medicoId) {
+            return res.status(401).send({ message: "Médico não autenticado." });
         }
 
-        // Cria o endereço
+        // Criar o endereço
         const newEndereco = new Endereco(endereco);
         await newEndereco.save();
 
-        // Cria o paciente com o endereço associado
-        const patient = new Patient({
+        // Criar o paciente e associá-lo ao médico
+        const newPatient = new Patient({
+            nome,
             cpf,
-            ...patientData,
-            endereco: newEndereco._id
+            endereco: newEndereco._id,
+            medicos: [medicoId] // O médico que cadastrou já é vinculado
         });
-        await patient.save();
 
-        res.status(201).send(patient);
+        await newPatient.save();
+
+        // Criar os prontuários, se houver
+        if (prontuarios && prontuarios.length > 0) {
+            const prontuariosCriados = await Prontuario.insertMany(
+                prontuarios.map(p => ({
+                    ...p,
+                    paciente: newPatient._id,
+                    medico: medicoId
+                }))
+            );
+
+            // Atualizar o paciente com os prontuários criados
+            newPatient.prontuarios = prontuariosCriados.map(p => p._id);
+            await newPatient.save();
+        }
+
+        // Associar o paciente ao médico no modelo User
+        await User.findByIdAndUpdate(
+            medicoId,
+            { $addToSet: { pacientes: newPatient._id } }, // Evita duplicação
+            { new: true }
+        );
+
+        res.status(201).send({
+            message: "Paciente cadastrado com sucesso!",
+            paciente: newPatient
+        });
+
     } catch (error) {
-        res.status(400).send({ message: 'Erro ao criar paciente.', error: error.message });
+        res.status(400).send({ message: "Erro ao criar paciente.", error: error.message });
     }
 };
+
+
+
+
 
 // Busca paciente por CPF
 exports.getPatientByCpf = async (req, res) => {
@@ -118,5 +152,27 @@ exports.getAllPatients = async (req, res) => {
         return sendSuccessResponse(res, patients);
     } catch (error) {
         return sendErrorResponse(res, 500, 'Erro ao buscar pacientes', error);
+    }
+};
+
+
+exports.getPacienteEndereco = async (req, res) => {
+    try {
+        const { cpf } = req.params;
+
+        // Buscar o paciente e popular o campo 'endereco'
+        const paciente = await Patient.findOne({ cpf }).populate('endereco');
+
+        if (!paciente) {
+            return res.status(404).json({ message: 'Paciente não encontrado.' });
+        }
+
+        if (!paciente.endereco) {
+            return res.status(404).json({ message: 'Endereço não cadastrado para este paciente.' });
+        }
+
+        res.status(200).json(paciente.endereco);
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao buscar endereço do paciente.', error: error.message });
     }
 };
