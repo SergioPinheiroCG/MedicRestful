@@ -14,60 +14,6 @@ const sendErrorResponse = (res, statusCode, message, error = null) => {
 const sendSuccessResponse = (res, data, message = 'Operação realizada com sucesso') => {
     return res.status(200).send({ message, data });
 };
-/*exports.createProntuario = async (req, res) => {
-    try {
-        const medicoId = req.userId; // Médico logado
-        const { pacienteId, descricao, diagnostico, tratamento, observacoes } = req.body;
-
-        if (!medicoId) {
-            return res.status(401).send({ message: "Médico não autenticado." });
-        }
-
-        // Verifica se o paciente existe
-        const paciente = await Patient.findById(pacienteId);
-        if (!paciente) {
-            return res.status(404).send({ message: "Paciente não encontrado." });
-        }
-
-        // Criar novo prontuário
-        const newProntuario = new Prontuario({
-            paciente: pacienteId,
-            medico: medicoId,
-            descricao,
-            diagnostico,
-            tratamento,
-            observacoes
-        });
-
-        await newProntuario.save();
-
-        // Adicionar o ID do prontuário ao paciente
-        paciente.prontuarios.push(newProntuario._id);
-
-        // Se o médico ainda não estiver vinculado ao paciente, adiciona na lista
-        if (!paciente.medicos.includes(medicoId)) {
-            paciente.medicos.push(medicoId);
-        }
-
-        await paciente.save();
-
-        // Adicionar o ID do paciente ao médico, caso ainda não esteja na lista dele
-        await User.findByIdAndUpdate(
-            medicoId,
-            { $addToSet: { pacientes: pacienteId } }, // Evita duplicação
-            { new: true }
-        );
-
-        res.status(201).send({
-            message: "Prontuário criado com sucesso!",
-            prontuario: newProntuario
-        });
-    } catch (error) {
-        res.status(400).send({ message: 'Erro ao criar prontuário.', error: error.message });
-    }
-};*/
-
-
 exports.createProntuario = async (req, res) => {
     try {
         const medicoId = req.userId; // Pegando o ID do médico autenticado pelo token
@@ -88,18 +34,7 @@ exports.createProntuario = async (req, res) => {
             return res.status(404).json({ message: "Paciente não encontrado." });
         }
 
-
-
-
-
-
-
-
-
-
-
-
-        
+     
         // Criar prontuário associado ao paciente e ao médico autenticado
         const newProntuario = new Prontuario({
             paciente: paciente._id,
@@ -125,16 +60,6 @@ exports.createProntuario = async (req, res) => {
         res.status(400).json({ message: "Erro ao criar prontuário.", error: error.message });
     }
 };
-
-
-
-
-
-
-
-
-
-
 
 // Busca prontuários por CPF do paciente
 exports.getProntuariosByPatientCpf = async (req, res) => {
